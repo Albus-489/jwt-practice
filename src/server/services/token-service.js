@@ -2,13 +2,13 @@ const jwt = require("jsonwebtoken");
 const tokenModel = require("../models/token-model");
 
 class TokenService {
-  generateToken(payload) {
+  generateTokens(payload) {
     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
-      expiersIn: "30m",
+      expiresIn: "30m",
     });
 
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
-      expiersIn: "30d",
+      expiresIn: "30d",
     });
 
     return {
@@ -28,4 +28,4 @@ class TokenService {
   }
 }
 
-module.exports = TokenService;
+module.exports = new TokenService();
