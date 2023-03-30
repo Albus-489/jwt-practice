@@ -2,12 +2,14 @@ const UserModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 const tokenService = require("./token-service");
-const mailService = requir("./mail-service");
+const mailService = require("./mail-service");
+const UserDTO = require("../DTOs/user-dto");
 
 class UserService {
   async registration(email, password) {
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
+      console.log(candidate);
       throw new Error(
         "User with email " + candidate.email + " already registered"
       );
@@ -20,8 +22,15 @@ class UserService {
       activationLink,
     });
     await mailService.sendActivationMail(email, activationLink);
-    const tokens = tokenService.generateToken();
+    const userDto = new UserDTO(user);
+    const tokens = tokenService.generateTokens({ ...userDto });
+    await tokenService.saveToken(userDto.id, tokens.refreshToken);
+
+    return {
+      ...tokens,
+      user: userDto,
+    };
   }
 }
 
-module.exports = UserService;
+module.exports = new UserService();
