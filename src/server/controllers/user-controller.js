@@ -11,8 +11,7 @@ class UserController {
       });
       return res.json({ userData: userData });
     } catch (error) {
-      console.log(error);
-      return res.json({ error: error.message });
+      next(error);
     }
   }
 
@@ -23,28 +22,28 @@ class UserController {
 
       return res.redirect(process.env.CLIENT_URL);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
   async login(req, res, next) {
     try {
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
   async logout(req, res, next) {
     try {
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
   async refresh(req, res, next) {
     try {
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
@@ -52,7 +51,7 @@ class UserController {
     try {
       res.json(["PRAISE", "THE", "SUN!"]);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 }
