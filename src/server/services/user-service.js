@@ -52,6 +52,11 @@ class UserService {
         "User not found! Please sign up with your email address."
       );
     }
+
+    const isPasswordsEquals = await bcrypt.compare(password, user.password);
+    if (!isPasswordsEquals) {
+      throw ApiError.BadRequestError("Invalid password.");
+    }
   }
 }
 
