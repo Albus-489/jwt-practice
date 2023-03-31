@@ -22,6 +22,6 @@ router.get("/activate/:link", userController.activate);
 router.get("/refresh", userController.refresh);
 
 // test endpoint
-router.get("/users", userController.getUsers);
+router.get("/users", userController.getAllUsers);
 
 module.exports = router;
