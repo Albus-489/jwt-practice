@@ -8,9 +8,24 @@ const errorMiddleware = require("./middlewares/error-middleware");
 
 const PORT = process.env.PORT || 8080;
 const app = express();
+
+const corsOpts = {
+  origin: true,
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(corsOpts));
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 app.use("/api", router);
 app.use(errorMiddleware);
 
