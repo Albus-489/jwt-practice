@@ -12,11 +12,16 @@ class UserController {
       return res.json({ userData: userData });
     } catch (error) {
       console.log(error);
+      return res.json({ error: error.message });
     }
   }
 
   async activate(req, res, next) {
     try {
+      const activationLink = req.params.link;
+      await userService.activate(activationLink);
+
+      return res.redirect(process.env.CLIENT_URL);
     } catch (error) {
       console.log(error);
     }

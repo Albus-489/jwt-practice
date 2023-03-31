@@ -16,12 +16,15 @@ class UserService {
     }
     const hashPassword = await bcrypt.hash(password, 3);
     const activationLink = uuid.v4();
+    await mailService.sendActivationMail(
+      email,
+      `${process.env.API_URL}/api/activate/${activationLink}`
+    );
     const user = await UserModel.create({
       email,
       password: hashPassword,
       activationLink,
     });
-    await mailService.sendActivationMail(email, activationLink);
     const userDto = new UserDTO(user);
     const tokens = tokenService.generateTokens({ ...userDto });
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
@@ -30,6 +33,15 @@ class UserService {
       ...tokens,
       user: userDto,
     };
+  }
+
+  async activate(activationLink) {
+    const user = await UserModel.findOne({ activationLink });
+    if (!user) {
+      throw new Error("Activation error!");
+    }
+    user.isActivated = true;
+    await user.save();
   }
 }
 
