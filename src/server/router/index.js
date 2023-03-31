@@ -1,9 +1,15 @@
 const Router = require("express");
 const userController = require("../controllers/user-controller");
+const { body } = require("express-validator");
 
 const router = new Router();
 
-router.post("/registration", userController.registration);
+router.post(
+  "/registration",
+  body("email").isEmail(),
+  body("password").isLength({ min: 8, max: 15 }),
+  userController.registration
+);
 router.post("/login", userController.login);
 
 // logout and refresh tokens
