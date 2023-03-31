@@ -16,7 +16,7 @@ const start = async () => {
   try {
     await mongoose.connect(process.env.DB_URL);
     app.listen(PORT, () => {
-      console.log("Server started on http://localhost:" + PORT);
+      console.log("Server started on http://localhost:" + PORT + "/api/users");
     });
   } catch (error) {
     console.log(error);
