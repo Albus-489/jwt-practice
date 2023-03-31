@@ -10,17 +10,17 @@ module.exports = function (req, res, next) {
 
     const accessToken = authHeader.split(" ")[1];
     if (!accessToken) {
-      next(ApiError.UnauthorizedError("No token found."));
+      return next(ApiError.UnauthorizedError("No token found."));
     }
 
     const userData = tokenService.validateAccessToken(accessToken);
-    if (userData) {
-      next(ApiError.UnauthorizedError("Invalid token."));
+    if (!userData) {
+      return next(ApiError.UnauthorizedError(`Invalid token.`));
     }
 
     req.user = userData;
     next();
   } catch (error) {
-    next(ApiError.UnauthorizedError("Unexpected error."));
+    return next(ApiError.UnauthorizedError("Unexpected error."));
   }
 };
